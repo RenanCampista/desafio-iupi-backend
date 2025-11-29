@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Transaction(models.Model):
+    """Modelo para representar uma transação financeira."""
     TYPE_CHOICES = [
         ("income", "Income"),
         ("expense", "Expense"),

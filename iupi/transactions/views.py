@@ -33,7 +33,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         if type:
             queryset = queryset.filter(type=type)
             
-        return queryset
+        return queryset.order_by('-date')
     
     def perform_create(self, serializer: TransactionSerializer):
         """Associa o usuário autenticado à transação ao criá-la.

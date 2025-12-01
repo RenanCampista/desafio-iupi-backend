@@ -18,3 +18,23 @@ services:
       - DJANGO_LOG_LEVEL=${DJANGO_LOG_LEVEL}
     env_file:
       - .env
+
+  iupi-docs:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app/iupi
+    environment:
+      # Precisa carregar as variáveis de ambiente para gerar a documentação corretamente
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS}
+      - DATABASE_ENGINE=${DATABASE_ENGINE}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - TIME_ZONE=${TIME_ZONE}
+      - DJANGO_LOG_LEVEL=${DJANGO_LOG_LEVEL}
+      - PYTHONPATH=/app/iupi
+    env_file:
+      - .env
+    command: sh -c "pdoc iupi transactions --output-dir /app/docs"

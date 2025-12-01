@@ -15,5 +15,6 @@ services:
       - DATABASE_ENGINE=${DATABASE_ENGINE}
       - DATABASE_NAME=${DATABASE_NAME}
       - TIME_ZONE=${TIME_ZONE}
+      - DJANGO_LOG_LEVEL=${DJANGO_LOG_LEVEL}
     env_file:
       - .env

@@ -1,6 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.request import Request
+from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 
 from .models import Transaction
@@ -11,6 +13,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     """ViewSet para gerenciar transações financeiras."""
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticated] # Exige autenticação para acessar as rotas
 
     def get_queryset(self):
         """Busca transações com base em filtros opcionais de descrição e tipo.
@@ -19,7 +22,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
             _type_: QuerySet de transações filtradas.
         """
         
-        queryset = Transaction.objects.all()
+        queryset = Transaction.objects.filter(user=self.request.user)
         
         description = self.request.query_params.get('description')
         type = self.request.query_params.get('type')
@@ -32,17 +35,30 @@ class TransactionViewSet(viewsets.ModelViewSet):
             
         return queryset
     
+    def perform_create(self, serializer: TransactionSerializer):
+        """Associa o usuário autenticado à transação ao criá-la.
+
+        Args:
+            serializer (TransactionSerializer): Serializador da transação.
+        """
+        serializer.save(user=self.request.user)
+    
     @action(detail=False, methods=['get'])
-    def summary(self, request) -> Response:
+    def summary(self, request: Request) -> Response:
         """Retorna um resumo das transações, incluindo totais de receitas, despesas e saldo.
 
         Args:
-            request (_type_): Requisição HTTP.
+            request (Request): Requisição HTTP.
         Returns:
             Response: Resposta HTTP com o resumo das transações.
         """
-        total_income = Transaction.objects.filter(type="income").aggregate(total=Sum('amount'))['total'] or 0
-        total_expense = Transaction.objects.filter(type="expense").aggregate(total=Sum('amount'))['total'] or 0
+        total_income = Transaction.objects.filter(
+            user=self.request.user, type="income"
+        ).aggregate(total=Sum('amount'))['total'] or 0
+        
+        total_expense = Transaction.objects.filter(
+            user=self.request.user, type="expense"
+        ).aggregate(total=Sum('amount'))['total'] or 0
         
         summary_data = {
             "total_income": f"{total_income:.2f}",

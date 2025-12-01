@@ -15,7 +15,8 @@ class TransactionSerializer(serializers.ModelSerializer):
             'date',
             'user',
         ]
-        
+        read_only_fields = ['user']
+         
     def validate_amount(self, value: float) -> float:
         """Valida o campo 'amount'.
         Garante que o valor seja maior que zero.

@@ -17,8 +17,6 @@ class Transaction(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="transactions",
-        null=True, # Deixar null até que a autenticação esteja implementada
-        blank=True
     )
     
     def __str__(self):

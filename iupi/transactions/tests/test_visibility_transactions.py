@@ -50,12 +50,12 @@ class TransactionVisibilityTests(BaseAPITestCase):
         
     def test_visibility_transactions(self):
         
-        response = self.client.get("/api/transactions/")
+        response = self.client.get("/transactions/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 1)
         self.assertEqual(response.data["results"][0]["description"], "Salario")
         
-        response = self.client_other.get("/api/transactions/")
+        response = self.client_other.get("/transactions/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 1)
         self.assertEqual(response.data["results"][0]["description"], "Pizza")

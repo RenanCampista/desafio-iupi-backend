@@ -27,7 +27,7 @@ class TransactionUpdateTest(BaseAPITestCase):
             "date": "2026-01-01"
         }
         
-        response = self.client.patch(f'/api/transactions/{self.transaction.id}/', payload)
+        response = self.client.patch(f'/transactions/{self.transaction.id}/', payload)
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['amount'], "2500.00")
@@ -44,7 +44,7 @@ class TransactionUpdateTest(BaseAPITestCase):
             "date": "2026-01-01"
         }
         
-        response = self.client.put(f'/api/transactions/{self.transaction.id}/', payload)
+        response = self.client.put(f'/transactions/{self.transaction.id}/', payload)
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['description'], "Salario atualizado")

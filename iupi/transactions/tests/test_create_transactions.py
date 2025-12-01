@@ -21,7 +21,7 @@ class TransactionCreateTest(BaseAPITestCase):
             "date": "2025-11-28"
         }
 
-        response = self.client.post("/api/transactions/", payload)
+        response = self.client.post("/transactions/", payload)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Transaction.objects.count(), 1)
@@ -38,7 +38,7 @@ class TransactionCreateTest(BaseAPITestCase):
             "date": "2025-11-28"
         }
         
-        response = self.client.post("/api/transactions/", payload)
+        response = self.client.post("/transactions/", payload)
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("description", response.data)
@@ -53,7 +53,7 @@ class TransactionCreateTest(BaseAPITestCase):
             "date": "2025-11-28"
         }
         
-        response = self.client.post("/api/transactions/", payload)
+        response = self.client.post("/transactions/", payload)
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("type", response.data)

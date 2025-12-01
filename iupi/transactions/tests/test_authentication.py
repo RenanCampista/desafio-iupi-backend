@@ -9,6 +9,6 @@ class AuthenticationTest(BaseAPITestCase):
     def test_cannot_access_transactions_without_token(self):
         """Sem token deve retornar 401"""
 
-        response = self.client.get("/api/transactions/")
+        response = self.client.get("/transactions/")
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

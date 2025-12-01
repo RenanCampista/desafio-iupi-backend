@@ -30,7 +30,7 @@ class TransactionListTest(BaseAPITestCase):
     def test_list_all_transactions(self):
         """Teste para listar todas as transações"""
         
-        response = self.client.get("/api/transactions/")
+        response = self.client.get("/transactions/")
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 2)
@@ -38,7 +38,7 @@ class TransactionListTest(BaseAPITestCase):
     def test_filter_transactions_by_type(self):
         """Teste para filtrar transações por tipo"""
         
-        response = self.client.get("/api/transactions/?type=income")
+        response = self.client.get("/transactions/?type=income")
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
@@ -47,7 +47,7 @@ class TransactionListTest(BaseAPITestCase):
     def test_filter_transactions_by_description(self):
         """Teste para filtrar transações por descricação"""
         
-        response = self.client.get("/api/transactions/?description=Flix") # testa o case-insentive
+        response = self.client.get("/transactions/?description=Flix") # testa o case-insentive
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
@@ -56,12 +56,12 @@ class TransactionListTest(BaseAPITestCase):
     def test_filter_combined(self):
         """Teste para filtrar transações combinando os filtros"""
         
-        response = self.client.get("/api/transactions/?type=income&description=Salario")
+        response = self.client.get("/transactions/?type=income&description=Salario")
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['description'], "Salario")
         
-        response = self.client.get("/api/transactions/?type=expense&description=Salario")
+        response = self.client.get("/transactions/?type=expense&description=Salario")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 0) # Salário não é expense, logo, será vazio

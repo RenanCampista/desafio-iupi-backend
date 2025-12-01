@@ -21,7 +21,7 @@ class TransactionDeleteTest(BaseAPITestCase):
     def test_delete_transactions(self):
         """Teste para deletar uma transação"""
         
-        response = self.client.delete(f"/api/transactions/{self.transaction.id}/")
+        response = self.client.delete(f"/transactions/{self.transaction.id}/")
         
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         

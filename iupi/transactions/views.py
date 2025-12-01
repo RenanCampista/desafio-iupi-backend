@@ -1,5 +1,5 @@
-from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +9,7 @@ from .models import Transaction
 from .serializers import TransactionSerializer
 
 
-class TransactionViewSet(viewsets.ModelViewSet):
+class TransactionViewSet(ModelViewSet):
     """ViewSet para gerenciar transações financeiras."""
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
@@ -43,8 +43,12 @@ class TransactionViewSet(viewsets.ModelViewSet):
         """
         serializer.save(user=self.request.user)
     
-    @action(detail=False, methods=['get'])
-    def summary(self, request: Request) -> Response:
+    
+class SummaryView(APIView):
+    """View para retornar resumo das transações."""
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request: Request) -> Response:
         """Retorna um resumo das transações, incluindo totais de receitas, despesas e saldo.
 
         Args:

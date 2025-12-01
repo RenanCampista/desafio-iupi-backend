@@ -1,7 +1,10 @@
 from rest_framework import routers
-from .views import TransactionViewSet
+from django.urls import path
+from .views import TransactionViewSet, SummaryView
 
 router = routers.DefaultRouter()
 router.register(r'transactions', TransactionViewSet, basename='transaction')
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('summary/', SummaryView.as_view(), name='summary'),
+] + router.urls

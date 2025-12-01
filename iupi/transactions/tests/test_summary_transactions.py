@@ -28,7 +28,7 @@ class TransactionSummaryTest(BaseAPITestCase):
         
     def test_summary_transactions(self):
         """Teste para obter o resumo das transações"""
-        response = self.client.get("/api/transactions/summary/") # TODO alterar a rota para /summary/
+        response = self.client.get("/summary/")
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['total_income'], '2000.00')

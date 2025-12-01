@@ -1,9 +1,19 @@
 services: 
 
   iupi-app:
-    build: .
+    build: .\
+    ports:
+      - "8000:8000"
     volumes:
       - .:/app
       - ./db.sqlite3:/app/db.sqlite3 # Persistência do banco de dados fora do container
-    ports:
-      - "8000:8000"
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS}
+      - DATABASE_ENGINE=${DATABASE_ENGINE}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - TIME_ZONE=${TIME_ZONE}
+    env_file:
+      - .env

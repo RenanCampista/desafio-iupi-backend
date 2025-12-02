@@ -57,3 +57,45 @@ class TransactionCreateTest(BaseAPITestCase):
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("type", response.data)
+        
+    def test_create_negative_amount_transaction(self):
+        """Teste para criar uma transação com valor negativo"""
+        
+        payload = {
+            "description": "Salario",
+            "amount": -500,
+            "type": "income",
+            "date": "2025-11-28"
+        }
+        
+        response = self.client.post("/transactions/", payload)
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("amount", response.data)
+        
+    def test_create_invalid_date_transaction(self):
+        """Teste para criar uma transação com data inválida"""
+        
+        payload = {
+            "description": "Salario",
+            "amount": 1000,
+            "type": "income",
+            "date": "11-12-2025" # Formato inválido (DD-MM-YYYY)
+        }
+        
+        response = self.client.post("/transactions/", payload)
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("date", response.data)
+        
+        payload = {
+            "description": "Salario",
+            "amount": 1000,
+            "type": "income",
+            "date": "2025-02-30" # Formato válido, porém data inexistente
+        }
+        
+        response = self.client.post("/transactions/", payload)
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("date", response.data)

@@ -78,6 +78,8 @@ O docker irá configurar o ambiente, instalar dependências, realizar migraçõe
 3. Em outro terminal, crie um superuser para acessar a API:
 Você pode usar o script `create_superuser.py` fornecido:
    ```bash
+    # Conceda permissão de execução (necessário apenas na primeira vez)
+    chmod +x scripts/create_superuser.sh
     bash scripts/create_superuser.sh
    ```
 
@@ -133,7 +135,9 @@ Os testes cobrem:
 Para executar os testes automatizados, use o comando:
 1. Se estiver usando Docker:
    ```bash
-   bash scripts/run_tests.sh
+    # Conceda permissão de execução (necessário apenas na primeira vez)
+    chmod +x scripts/run_tests.sh
+    bash scripts/run_tests.sh
    ```
 2. Se estiver sem Docker:
    ```bash

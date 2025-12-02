@@ -2,6 +2,7 @@ from rest_framework import status
 
 from .base import BaseAPITestCase
 from ..models import Transaction
+from django.conf import settings
 
 
 class TransactionListTest(BaseAPITestCase):
@@ -34,6 +35,45 @@ class TransactionListTest(BaseAPITestCase):
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 2)
+        
+    def test_pagination(self):
+        """Teste para paginação da listagem de transações"""
+        
+        for i in range(7):
+            Transaction.objects.create(
+                description=f"T{i}",
+                amount=100,
+                type="income",
+                date="2025-12-01",
+                user=self.user
+            )
+        
+        response = self.client.get("/transactions/?page=1")
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            len(response.data["results"]), 
+            settings.REST_FRAMEWORK['PAGE_SIZE']
+        )
+        
+        self.assertIn("count", response.data)
+        self.assertIn("next", response.data)
+        self.assertIn("previous", response.data)
+        
+        self.assertEqual(response.data["count"], 9) # 7 criados nesse teste + 2 do setUp
+        self.assertIsNotNone(response.data["next"])
+        self.assertIsNone(response.data["previous"])
+
+        # agora testar página 2
+        response_page2 = self.client.get("/transactions/?page=2")
+
+        self.assertEqual(response_page2.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            len(response_page2.data["results"]), 
+            9 - settings.REST_FRAMEWORK['PAGE_SIZE']
+        )
+        self.assertIsNone(response_page2.data["next"])
+        self.assertIsNotNone(response_page2.data["previous"])
         
     def test_filter_transactions_by_type(self):
         """Teste para filtrar transações por tipo"""

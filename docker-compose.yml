@@ -6,7 +6,6 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-      - ./db.sqlite3:/app/db.sqlite3 # Persistência do banco de dados fora do container
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
